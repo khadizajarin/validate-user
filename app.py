@@ -1,4 +1,3 @@
-
 from flask import Flask, render_template, request, redirect, url_for, session, flash
 import pymysql
 import bcrypt
@@ -49,8 +48,9 @@ def register():
             msg = 'Username must contain only letters and numbers!'
         elif not re.match(r'[^@]+@[^@]+\.[^@]+', email):
             msg = 'Invalid email address!'
-        elif len(password) < 6:
-            msg = 'Password must be at least 6 characters!'
+        # Enhanced password validation: at least 6 chars, 1 uppercase, 1 lowercase, 1 digit, 1 special char
+        elif not re.match(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$', password.decode('utf-8')):
+            msg = 'Password must be at least 6 characters long and include at least one uppercase letter, one lowercase letter, one digit, and one special character (@$!%*?&)!'
         else:
             conn = get_db_connection()
             if conn is None:
