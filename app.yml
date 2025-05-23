@@ -1,0 +1,15 @@
+runtime: python39
+instance_class: F1
+
+handlers:
+- url: /.*
+  script: auto
+
+env_variables:
+  MYSQL_HOST: "mysql-12eab867-khadiza131310-33f7.c.aivencloud.com"
+  MYSQL_PORT: "15214"
+  MYSQL_USER: "avnadmin"
+  MYSQL_PASSWORD: "AVNS_szkjJJ8TpeGkUMW4Rxw"
+  MYSQL_DB: "defaultdb"
+  SECRET_KEY: "669f018ae399b7b7b42686ae07f3e013"
+  MYSQL_SSL_CA: "aiven-ca.pem"

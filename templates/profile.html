@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; padding: 50px; }
+        .container { max-width: 400px; margin: 0 auto; }
+        a { color: blue; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+        .success { color: green; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome, {{ username }}!</h1>
+        <p>You are logged in.</p>
+        {% for message in get_flashed_messages() %}
+            <p class="success">{{ message }}</p>
+        {% endfor %}
+        <a href="/logout">Logout</a>
+    </div>
+</body>
+</html>
