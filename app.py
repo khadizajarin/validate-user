@@ -46,9 +46,8 @@ def register():
         # Input validation
         if not re.match(r'[A-Za-z0-9]+', username):
             msg = 'Username must contain only letters and numbers!'
-        elif not re.match(r'[^@]+@[^@]+\.[^@]+', email):
-            msg = 'Invalid email address!'
-        # Enhanced password validation: at least 6 chars, 1 uppercase, 1 lowercase, 1 digit, 1 special char
+        elif not re.match(r'[^@]+@gmail\.com$', email):  # Ensure email ends with @gmail.com
+            msg = 'Email must be a valid Gmail address (e.g., user@gmail.com)!'
         elif not re.match(r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$', password.decode('utf-8')):
             msg = 'Password must be at least 6 characters long and include at least one uppercase letter, one lowercase letter, one digit, and one special character (@$!%*?&)!'
         else:
@@ -58,11 +57,18 @@ def register():
                 return render_template('register.html', msg=msg)
             
             cursor = conn.cursor()
+            # Check for username uniqueness
             cursor.execute('SELECT * FROM users WHERE username = %s', (username,))
-            account = cursor.fetchone()
+            account_by_username = cursor.fetchone()
             
-            if account:
-                msg = 'Account already exists!'
+            # Check for email uniqueness
+            cursor.execute('SELECT * FROM users WHERE email = %s', (email,))
+            account_by_email = cursor.fetchone()
+            
+            if account_by_username:
+                msg = 'Account already exists with this username!'
+            elif account_by_email:
+                msg = 'Account already exists with this email!'
             else:
                 hashed = bcrypt.hashpw(password, bcrypt.gensalt()).decode('utf-8')
                 cursor.execute('INSERT INTO users (username, password, email) VALUES (%s, %s, %s)', (username, hashed, email))
